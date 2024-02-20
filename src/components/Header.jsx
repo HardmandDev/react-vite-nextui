@@ -11,6 +11,7 @@ import {
 } from '@nextui-org/react';
 import { DisograrteLogo as Logo } from '../assets/DisograrteLogo';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Theme from './func/Theme';
 
 const navItems = [
   { path: '/', label: 'Home' },
@@ -30,12 +31,14 @@ function Header() {
     if (!isMenuOpen && !navItems.some(item => item.path === activePath)) {
       navigate('/');
     }
-  }, [navigate, activePath, isMenuOpen]); // Only include essential dependencies
+  }, [navigate, activePath, isMenuOpen]);
 
   const handleMenuItemClick = useCallback((path) => {
     navigate(path);
     setIsMenuOpen(false); // Close menu after navigation
   }, [navigate]);
+
+  const themeButton = <Theme />; // Definir el botón de tema una vez
 
   return (
     <Navbar
@@ -49,23 +52,26 @@ function Header() {
           <p className='font-bold text-inherit'>Disograrte</p>
         </Link>
       </NavbarBrand>
-      <NavbarContent className='sm:hidden' justify='end'>
+      <NavbarContent className='sm:hidden' justify='center'>
         <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} />
       </NavbarContent>
-      <NavbarContent className='hidden sm:flex gap-4' justify='end'>
+      <NavbarContent className='hidden sm:flex gap-4' justify='center'>
         {navItems.map((item) => (
           <NavbarItem key={item.path} isActive={activePath === item.path}>
             <Link
               color={activePath === item.path ? '' : 'foreground'}
               href={item.path}
-              className={activePath === item.path ? 'active menu' : 'menu'}
+              className={activePath === item.path ? 'active' : ''}
             >
               {item.label}
             </Link>
           </NavbarItem>
         ))}
+        <NavbarItem>{themeButton}</NavbarItem> {/* Mostrar el botón de tema */}
       </NavbarContent>
-      <NavbarMenu>
+
+      {/* NavbarContent para mostrar el botón de tema en el menú desplegable */}
+      <NavbarMenu justify='center'>
         {navItems.map((item) => (
           <NavbarMenuItem key={item.path}>
             <Link
@@ -77,6 +83,7 @@ function Header() {
             </Link>
           </NavbarMenuItem>
         ))}
+        <NavbarMenuItem>{themeButton}</NavbarMenuItem> {/* Mostrar el botón de tema */}
       </NavbarMenu>
     </Navbar>
   );
